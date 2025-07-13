@@ -40,3 +40,25 @@ jobs:
         run: |
           sudo chmod +x ./find_alpine_releases.sh
           sudo ./find_alpine_releases.sh
+
+      - name: Download Alpine Version
+        run: |
+           # Array architetture Alpine
+           ALPINE_ARCHITECTURES=("aarch64" "armhf" "armv7" "ppc64le" "x86" "x86_64")
+           while IFS= read -r line; do
+              # Estrai versione dalla riga (3.22.0)
+              ALPINE_VERSION=$(echo "$line" | awk '{print $3}')
+              ALPINE_RELEASE=$(echo "$ALPINE_VERSION" | cut -d. -f1,2)  # es. 3.22
+
+              for ALPINE_ARCHITECTURE in "${ALPINE_ARCHITECTURES[@]}"; do
+                  OUTDIR="alpine-${ALPINE_VERSION}"
+                  OUTFILE="${OUTDIR}/$/alpine-minirootfs-${ALPINE_VERSION}-${ALPINE_ARCHITECTURE}.tar.gz"
+                  URL="https://dl-cdn.alpinelinux.org/alpine/v${ALPINE_RELEASE}/releases/${ALPINE_ARCHITECTURE}/alpine-minirootfs-${ALPINE_VERSION}-${ALPINE_ARCHITECTURE}.tar.gz"
+
+                  mkdir -p "$OUTDIR"
+
+                  echo "⬇️  Scarico: $URL"
+                  wget -q --show-progress "$URL" -O "$OUTFILE" || echo "⚠️  Errore nel download: $URL"
+             done
+           done < "$INPUT_FILE"
+    
