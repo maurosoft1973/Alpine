@@ -24,4 +24,8 @@ jobs:
           sudo wget https://github.com/benibela/xidel/releases/download/Xidel_0.9.8/xidel_0.9.8-1_amd64.deb
           sudo dpkg -i xidel_0.9.8-1_amd64.deb
           sudo rm  xidel_0.9.8-1_amd64.deb
-          
+          sudo xidel --version
+
+      - name: Extracted Alpine Release
+        run: |
+          sudo ./find_alpine_releases.sh
