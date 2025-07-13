@@ -1,0 +1,27 @@
+name: Build Alpine
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 3 * * *' # ogni giorno alle 3:00 UTC
+
+permissions:
+  contents: write
+
+jobs:
+  sync-and-build:
+    runs-on: ubuntu-22.04
+
+    strategy:
+      matrix:
+        arch: [amd64]
+
+    steps:
+      - name: Install base dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y curl jq wget git libssl-dev
+          sudo wget https://github.com/benibela/xidel/releases/download/Xidel_0.9.8/xidel_0.9.8-1_amd64.deb
+          sudo dpkg -i xidel_0.9.8-1_amd64.deb
+          sudo rm  xidel_0.9.8-1_amd64.deb
+          
