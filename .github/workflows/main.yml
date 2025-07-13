@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 jobs:
-  sync-and-build:
+  find-version:
     runs-on: ubuntu-22.04
 
     strategy:
@@ -17,21 +17,26 @@ jobs:
         arch: [amd64]
 
     steps:
-      - name: Install base dependencies
+      - name: 📦 Install base dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y curl jq wget git libssl-dev
           sudo wget https://github.com/benibela/xidel/releases/download/Xidel_0.9.8/xidel_0.9.8-1_amd64.deb
           sudo dpkg -i xidel_0.9.8-1_amd64.deb
           sudo rm  xidel_0.9.8-1_amd64.deb
-          sudo xidel --version
 
-      - name: Checkout
+      - name: 🐧 Setup for QEmu
+        uses: docker/setup-qemu-action@v3
+        
+      - name: 🐧 Setup Docker
+        uses: docker/setup-buildx-action@v3
+        
+      - name: 📥 Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           
-      - name: Extracted Alpine Release
+      - name: 🧾 Extracted Alpine Release
         run: |
           sudo chmod +x ./find_alpine_releases.sh
           sudo ./find_alpine_releases.sh
