@@ -60,5 +60,5 @@ jobs:
                   echo "⬇️  Scarico: $URL"
                   wget -q --show-progress "$URL" -O "$OUTFILE" || echo "⚠️  Errore nel download: $URL"
              done
-           done < "$INPUT_FILE"
+           done < "./alpine_expanded.txt"
     
