@@ -28,4 +28,5 @@ jobs:
 
       - name: Extracted Alpine Release
         run: |
+          sudo chmod +x ./find_alpine_releases.sh
           sudo ./find_alpine_releases.sh
