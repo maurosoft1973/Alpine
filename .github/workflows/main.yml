@@ -51,12 +51,10 @@ jobs:
               ALPINE_RELEASE=$(echo "$ALPINE_VERSION" | cut -d. -f1,2)  # es. 3.22
 
               for ALPINE_ARCHITECTURE in "${ALPINE_ARCHITECTURES[@]}"; do
-                  OUTDIR="alpine-${ALPINE_VERSION}"
-                  OUTFILE="${OUTDIR}/$/alpine-minirootfs-${ALPINE_VERSION}-${ALPINE_ARCHITECTURE}.tar.gz"
+                  OUTDIR="/alpine-${ALPINE_VERSION}"
+                  OUTFILE="${OUTDIR}/alpine-minirootfs-${ALPINE_VERSION}-${ALPINE_ARCHITECTURE}.tar.gz"
                   URL="https://dl-cdn.alpinelinux.org/alpine/v${ALPINE_RELEASE}/releases/${ALPINE_ARCHITECTURE}/alpine-minirootfs-${ALPINE_VERSION}-${ALPINE_ARCHITECTURE}.tar.gz"
-
                   mkdir -p "$OUTDIR"
-
                   echo "⬇️  Scarico: $URL"
                   wget -q --show-progress "$URL" -O "$OUTFILE" || echo "⚠️  Errore nel download: $URL"
              done
