@@ -44,6 +44,7 @@ jobs:
       - name: Download Alpine Version
         run: |
            # Array architetture Alpine
+           CHANGES=0
            ALPINE_ARCHITECTURES=("aarch64" "armhf" "armv7" "ppc64le" "x86" "x86_64")
            while IFS= read -r line; do
               # Estrai versione dalla riga (3.22.0)
@@ -57,6 +58,16 @@ jobs:
                   mkdir -p "$OUTDIR"
                   echo "⬇️  Scarico: $URL"
                   wget -q --show-progress "$URL" -O "$OUTFILE" || echo "⚠️  Errore nel download: $URL"
-             done
+                  CHANGES=1
+              done
            done < "./alpine_expanded.txt"
+           echo "CHANGES=$CHANGES" >> $GITHUB_ENV
+           
+      - name: Commit e push
+        if: env.CHANGES == '1'
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git commit -m "Added new Alpine Version"
+          git push
     
