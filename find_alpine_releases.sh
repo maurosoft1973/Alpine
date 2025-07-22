@@ -3,6 +3,9 @@
 INPUT_FILE="alpine_raw.txt"
 OUTPUT_FILE="alpine_expanded.txt"
 
+[ -e ${INPUT_FILE} ] && truncate -s 0 ${INPUT_FILE}
+[ -e ${OUTPUT_FILE} ] && truncate -s 0 ${OUTPUT_FILE}
+
 xidel "https://www.alpinelinux.org/posts/" \
   --xpath '(//ul[@class="home-list"]/li[contains(translate(., "RELEASED", "released"), "released")])[position() <= 2]' \
   -e 'string(./time) || " " || substring-before(substring-after(./a, "Alpine "), " released")' > "$INPUT_FILE"
